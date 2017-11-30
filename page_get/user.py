@@ -8,7 +8,7 @@ from db.seed_ids import set_seed_crawled
 from page_parse.user import enterprise, person, public
 
 
-base_url = 'http://weibo.com/p/{}{}/info?mod=pedit_more'
+base_url = 'https://weibo.com/p/{}{}/info?mod=pedit_more'
 
 
 def get_user_detail(user_id, html):
@@ -31,7 +31,7 @@ def get_enterprise_detail(user_id, html):
     return user
 
 
-def get_url_from_web(user_id):
+def get_url_from_web(user_id, domain):
     """
     Get user info according to user id.
     If user domain is 100505,the url is just 100505+userid;
@@ -43,16 +43,14 @@ def get_url_from_web(user_id):
     if not user_id:
         return None
 
-    url = base_url.format('100505', user_id)
+    url = base_url.format(domain, user_id)
     html = get_page(url)
 
     if not is_404(html):
-        domain = public.get_userdomain(html)
-
         # writers(special users)
         if domain == '103505' or domain == '100306':
-            url = base_url.format(domain, user_id)
-            html = get_page(url)
+            # url = base_url.format(domain, user_id)
+            # html = get_page(url)
             user = get_user_detail(user_id, html)
         # normal users
         elif domain == '100505':
@@ -81,7 +79,7 @@ def get_url_from_web(user_id):
         return None
 
 
-def get_profile(user_id):
+def get_profile(user_id, domain):
     """
     :param user_id: uid
     :return: user info and is crawled or not
@@ -93,7 +91,7 @@ def get_profile(user_id):
         set_seed_crawled(user_id, 1)
         is_crawled = 1
     else:
-        user = get_url_from_web(user_id)
+        user = get_url_from_web(user_id, domain)
         if user is not None:
             set_seed_crawled(user_id, 1)
         else:
@@ -103,7 +101,7 @@ def get_profile(user_id):
     return user, is_crawled
 
 
-def get_fans_or_followers_ids(user_id, crawl_type):
+def get_fans_or_followers_ids(user_id, domain, crawl_type):
     """
     Get followers or fans
     :param user_id: user id
@@ -114,15 +112,15 @@ def get_fans_or_followers_ids(user_id, crawl_type):
     # todo check fans and followers the special users,such as writers
     # todo deal with conditions that fans and followers more than 5 pages
     if crawl_type == 1:
-        fans_or_follows_url = 'http://weibo.com/p/100505{}/follow?relate=fans&page={}#Pl_Official_HisRelation__60'
+        fans_or_follows_url = 'https://weibo.com/p/{}{}/follow?relate=fans&page={}#Pl_Official_HisRelation__60'
     else:
-        fans_or_follows_url = 'http://weibo.com/p/100505{}/follow?page={}#Pl_Official_HisRelation__60'
+        fans_or_follows_url = 'https://weibo.com/p/{}{}/follow?page={}#Pl_Official_HisRelation__60'
 
     cur_page = 1
     max_page = 6
     user_ids = list()
     while cur_page < max_page:
-        url = fans_or_follows_url.format(user_id, cur_page)
+        url = fans_or_follows_url.format(domain, user_id, cur_page)
         page = get_page(url)
         if cur_page == 1:
             urls_length = public.get_max_crawl_pages(page)

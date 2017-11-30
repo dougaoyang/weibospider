@@ -145,7 +145,7 @@ def get_max_num(html):
     :return: 
     """
     soup = BeautifulSoup(html, "html.parser")
-    href_list = soup.find(attrs={'action-type': 'feed_list_page_morelist'}).find_all('a')
+    href_list = soup.find_all(attrs={'bpfilter': 'page'})
     return len(href_list)
 
 

@@ -31,6 +31,11 @@ def get_userdomain(html):
     m = pattern.search(html)
     return m.group(1) if m else ''
 
+@parse_decorator('')
+def get_pageid(html):
+    pattern = re.compile(r'\$CONFIG\[\'page_id\'\]=\'(.*)\';')
+    m = pattern.search(html)
+    return m.group(1) if m else ''
 
 @parse_decorator('')
 def _get_statushtml(html):

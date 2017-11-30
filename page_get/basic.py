@@ -3,6 +3,7 @@ import os
 import time
 import signal
 import requests
+requests.packages.urllib3.disable_warnings()
 from headers import headers
 from db.redis_db import Urls
 from db.redis_db import Cookies

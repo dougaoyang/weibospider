@@ -5,3 +5,4 @@ logs
 celerybeat-schedule.db
 .env
 *.pyc
+test.py

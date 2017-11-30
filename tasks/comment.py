@@ -8,7 +8,7 @@ from page_get.basic import get_page
 from db.weibo_comment import save_comments
 
 # 起始请求地址
-base_url = 'http://weibo.com/aj/v6/comment/big?ajwvr=6&id={}&page={}&__rnd={}'
+base_url = 'https://weibo.com/aj/v6/comment/big?ajwvr=6&id={}&page={}&__rnd={}'
 
 
 @app.task(ignore_result=True)

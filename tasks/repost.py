@@ -10,7 +10,7 @@ from page_get import user as user_get
 from config.conf import get_max_repost_page
 
 
-base_url = 'http://weibo.com/aj/v6/mblog/info/big?ajwvr=6&id={}&page={}'
+base_url = 'https://weibo.com/aj/v6/mblog/info/big?ajwvr=6&id={}&page={}'
 
 
 @app.task

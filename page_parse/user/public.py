@@ -21,6 +21,10 @@ def get_userdomain(html):
     return status.get_userdomain(html)
 
 
+def get_pageid(html):
+    return status.get_pageid(html)
+
+
 @parse_decorator('')
 def _get_header(html):
     soup = BeautifulSoup(html, "html.parser")

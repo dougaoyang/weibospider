@@ -17,9 +17,10 @@ from page_parse.home import (get_wbdata_fromweb,
 
 
 # only crawls origin weibo
-home_url = 'http://weibo.com/u/{}?is_ori=1&is_tag=0&profile_ftype=1&page={}'
-ajax_url = 'http://weibo.com/p/aj/v6/mblog/mbloglist?ajwvr=6&domain={}&pagebar={}&is_ori=1&id={}{}&page={}' \
-           '&pre_page={}&__rnd={}'
+# home_url = 'http://weibo.com/u/{}?is_ori=1&is_tag=0&profile_ftype=1&page={}'
+home_url = 'https://weibo.com/u/{}/home?topnav=1&wvr=6&page={}'
+# ajax_url = 'http://weibo.com/p/aj/v6/mblog/mbloglist?ajwvr=6&domain={}&pagebar={}&is_ori=1&id={}{}&page={}&pre_page={}&__rnd={}'
+ajax_url = 'https://weibo.com/p/aj/v6/mblog/mbloglist?ajwvr=6&domain={}&is_all=1&pagebar={}&id={}&script_uri=/{}&page={}&pre_page={}&__rnd={}'
 
 
 @app.task(ignore_result=True)
@@ -53,9 +54,10 @@ def crawl_weibo_datas(uid):
         insert_weibo_datas(weibo_datas)
 
         domain = public.get_userdomain(html)
+        page_id = public.get_pageid(html)
         cur_time = int(time.time()*1000)
-        ajax_url_0 = ajax_url.format(domain, 0, domain, uid, cur_page, cur_page, cur_time)
-        ajax_url_1 = ajax_url.format(domain, 1, domain, uid, cur_page, cur_page, cur_time+100)
+        ajax_url_0 = ajax_url.format(domain, 0, page_id, uid, cur_page, cur_page, cur_time)
+        ajax_url_1 = ajax_url.format(domain, 1, page_id, uid, cur_page, cur_page, cur_time+100)
 
         if cur_page == 1:
             # here we use local call to get total page number
